@@ -5,6 +5,10 @@
 		<name>ApexClass</name>
 	</types>
 	<types>
+		<members>*</members>
+		<name>CustomLabels</name>
+	</types>
+	<types>
 		<members>Account</members>
 		<members>Asset</members>
 		<members>AssetEnrichmentParameters__c</members>
@@ -21,7 +25,17 @@
 	</types>
 	<types>
 		<members>*</members>
+		<name>Layout</name>
+	</types>
+	<types>
+		<members>*</members>
 		<name>Profile</name>
+	</types>
+	<types>
+		<members>Metric.Completion</members>
+		<members>Metric.Progress</members>
+		<members>Product2.Vehicle</members>
+		<name>RecordType</name>
 	</types>
 	<types>
 		<members>OpportunityLineItem.AllowSubscription</members>
