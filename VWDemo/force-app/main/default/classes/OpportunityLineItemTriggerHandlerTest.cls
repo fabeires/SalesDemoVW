@@ -119,4 +119,33 @@ public class OpportunityLineItemTriggerHandlerTest {
         // If all goes well percentage of 20% should be added to the unit price
         System.assertEquals(12, testLineItemAfterSave.UnitPrice);
     }
+    
+    @isTest
+    public static void shouldAdjustUnitPriceOnUpdateOfSubscription() {
+        // Build Opp line item
+        OpportunityLineItem testLineItem = new OpportunityLineItem();
+        testLineItem.OpportunityId = [Select id from Opportunity limit 1].Id;
+        testLineItem.Product2Id = [Select id from Product2 limit 1].Id;
+        testLineItem.Has_subscription__c = true;
+        testLineItem.Subscription_Percentage__c = '10';
+        testLineItem.UnitPrice = 10;
+        testLineItem.Quantity = 1;
+        //testLineItem.PricebookEntryId = [Select id from PricebookEntry limit 1].Id;
+        insert testLineItem;
+        
+        // update line item so it goes through the trigger
+        Test.startTest();
+        
+        testLineItem.Has_subscription__c = false;
+        update testLineItem;
+        
+        Test.stopTest();
+        
+        // Query to get the new value after trigger function
+        OpportunityLineItem testLineItemAfterSave = [Select UnitPrice,Subscription_Percentage__c from OpportunityLineItem limit 1];
+        
+        // If all goes well percentage of 20% should be added to the unit price
+        System.assertEquals(10, testLineItemAfterSave.UnitPrice);
+        System.assertEquals('0', testLineItemAfterSave.Subscription_Percentage__c);
+    }
 }

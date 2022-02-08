@@ -170,6 +170,10 @@
 		<name>Profile</name>
 	</types>
 	<types>
+		<members>*</members>
+		<name>QuickAction</name>
+	</types>
+	<types>
 		<members>Metric.Completion</members>
 		<members>Metric.Progress</members>
 		<members>Product2.Vehicle</members>
@@ -183,6 +187,8 @@
 	<types>
 		<members>OpportunityLineItem.AllowSubscription</members>
 		<members>OpportunityLineItem.Demand_Subscription_percentage</members>
+		<members>Order.ActivatedOrderCanNotChange</members>
+		<members>OrderItem.OrderProductNotEditable</members>
 		<name>ValidationRule</name>
 	</types>
 	<version>53.0</version>

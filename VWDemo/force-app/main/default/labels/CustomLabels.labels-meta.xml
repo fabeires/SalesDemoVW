@@ -14,7 +14,7 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>AlreadyAssociatedOrder</shortDescription>
-        <value>&apos;here is already an associated order:</value>
+        <value>There is already an associated active order:</value>
     </labels>
     <labels>
         <fullName>AssetAPIMockData</fullName>

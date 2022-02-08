@@ -57,7 +57,6 @@ public class OrderTriggerHandlerTest {
         Order testOrder = new Order();
         testOrder.AccountId = [Select id from Account limit 1].Id;
         testOrder.OpportunityId = [Select id from Opportunity limit 1].Id;
-        testOrder.Pricebook2Id = Test.getStandardPricebookId();
         testOrder.Status = System.Label.OrderDraft;
         testOrder.EffectiveDate = System.today();
         
@@ -68,10 +67,13 @@ public class OrderTriggerHandlerTest {
         Test.stopTest();
         
         // Query to get the new value after trigger function
-        List<OrderItem> testOrderItems = [Select Id from OrderItem];
+        List<OrderItem> testOrderItems = [Select Id, Order.Pricebook2Id from OrderItem];
         
         // If all goes well there should now be an order item
         System.assertEquals(1, testOrderItems.size());
+        
+        // Check if pricebook Id is set from Opportunity
+        System.assertEquals(Test.getStandardPricebookId(), testOrderItems.get(0).Order.Pricebook2Id);
     }
     
     @isTest

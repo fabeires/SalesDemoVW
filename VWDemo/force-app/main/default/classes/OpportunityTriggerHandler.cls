@@ -38,6 +38,8 @@ public without sharing class OpportunityTriggerHandler {
                     currentAsset.Price = auxOppLine.UnitPrice;
                     currentAsset.AccountId = auxOppLine.Opportunity.AccountId;
                     currentAsset.Has_subscription__c = auxOppLine.Has_subscription__c;
+                    currentAsset.PurchaseDate = system.today();
+                    currentAsset.Quantity = 1;
                     if(currentAsset.Has_subscription__c)
                     currentAsset.Subscription_End_Date__c = Date.newInstance(system.Today().year()+1, system.Today().month(), system.Today().Day());
                     assetListToInsert.add(currentAsset);  

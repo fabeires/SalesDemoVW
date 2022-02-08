@@ -16,13 +16,13 @@ public without sharing class OrderTriggerHandler {
         if(!opportunityIdSet.isEmpty()) {
             List<Opportunity> opportunityListToUpdate = new List<Opportunity>();
             opportunityListToUpdate = [Select Id, StageName, (Select Id, UnitPrice, Quantity, Product2Id, PricebookEntryId, Has_subscription__c, Subscription_Percentage__c from OpportunityLineItems) from Opportunity where Id IN: opportunityIdSet];
-                     
+           
             // Creation if Order item for item Line Item on Opportunity
             for(Order auxOrder : orderList) {
                 for(Opportunity auxOpp : opportunityListToUpdate) {
-                    if(auxOpp.OpportunityLineItems.size() > 0) {
+                    if(auxOpp.OpportunityLineItems.size() > 0 && auxOpp.Id == auxOrder.OpportunityId) {
                         for(OpportunityLineItem auxLineItem: auxOpp.OpportunityLineItems) {
-                            
+
                             // Each Order item
                             OrderItem currentItem = new OrderItem();
                             currentItem.OrderId = auxOrder.Id;
@@ -41,6 +41,7 @@ public without sharing class OrderTriggerHandler {
             // Insert Order Items
             if(!orderLineItemList.isEmpty()) {       
                 try{
+                    system.debug('orderLineItemList' + orderLineItemList);
                     insert orderLineItemList;
                 }
                 catch(Exception e) {
@@ -62,7 +63,7 @@ public without sharing class OrderTriggerHandler {
         // If any Opportunity
         if(!opportunityIdSet.isEmpty()) {
             List<Opportunity> opportunityListToUpdate = new List<Opportunity>();
-            opportunityListToUpdate = [Select Id, StageName, (Select Id from OpportunityLineItems), (Select Id, OrderNumber from Orders) from Opportunity where Id IN: opportunityIdSet];
+            opportunityListToUpdate = [Select Id, StageName, (Select Id from OpportunityLineItems), (Select Id, OrderNumber from Orders where Status = 'Activated') from Opportunity where Id IN: opportunityIdSet];
             
             // prevent creation if Opportunity has no products or if it has any other order
             for(Opportunity auxOpp : opportunityListToUpdate) {
@@ -76,7 +77,7 @@ public without sharing class OrderTriggerHandler {
                 if(auxOpp.Orders.size() > 0) { 
                     for(Order aux: orderList) {
                         if(aux.OpportunityId == auxOpp.Id) {
-                            aux.addError(System.Label.AlreadyAssociatedOrder + auxOpp.Orders.get(0).OrderNumber); 
+                            aux.addError(System.Label.AlreadyAssociatedOrder + ' ' +  auxOpp.Orders.get(0).OrderNumber); 
                         }
                     }  
                 }

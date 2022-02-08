@@ -52,13 +52,13 @@
         <label>Subscription</label>
         <layoutColumns>
             <layoutItems>
-                <behavior>Readonly</behavior>
+                <behavior>Edit</behavior>
                 <field>Has_subscription__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
-                <behavior>Readonly</behavior>
+                <behavior>Edit</behavior>
                 <field>Subscription_Percentage__c</field>
             </layoutItems>
         </layoutColumns>
