@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>AllowSubscription</fullName>
+    <active>true</active>
+    <description>Subscription fields filled in only if product allows subscription</description>
+    <errorConditionFormula>OR( 
+				NOT( ISPICKVAL(Subscription_Percentage__c, &apos;&apos;)),
+    Has_subscription__c = true
+		)
+				&amp;&amp;
+ Product2.Allows_subscription__c = false</errorConditionFormula>
+    <errorMessage>Product does not allow susbscription</errorMessage>
+</ValidationRule>

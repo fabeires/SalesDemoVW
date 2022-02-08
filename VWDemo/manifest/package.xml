@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+	<types>
+		<members>*</members>
+		<name>ApexClass</name>
+	</types>
+	<types>
+		<members>Account</members>
+		<members>Asset</members>
+		<members>AssetEnrichmentParameters__c</members>
+		<members>Contact</members>
+		<members>Lead</members>
+		<members>Opportunity</members>
+		<members>OpportunityLineItem</members>
+		<members>Order</members>
+		<members>OrderItem</members>
+		<members>Pricebook2</members>
+		<members>PricebookEntry</members>
+		<members>Product2</members>
+		<name>CustomObject</name>
+	</types>
+	<types>
+		<members>*</members>
+		<name>Profile</name>
+	</types>
+	<types>
+		<members>OpportunityLineItem.AllowSubscription</members>
+		<members>OpportunityLineItem.Demand_Subscription_percentage</members>
+		<name>ValidationRule</name>
+	</types>
+	<version>53.0</version>
+</Package>

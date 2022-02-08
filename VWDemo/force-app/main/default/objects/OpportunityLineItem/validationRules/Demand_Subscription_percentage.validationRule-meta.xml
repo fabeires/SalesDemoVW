@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Demand_Subscription_percentage</fullName>
+    <active>true</active>
+    <description>If has subscription, percentage is mandatory</description>
+    <errorConditionFormula>(ISPICKVAL(Subscription_Percentage__c, &apos;&apos;) ||
+ISPICKVAL(Subscription_Percentage__c, &apos;0&apos;))
+&amp;&amp;
+Has_subscription__c = true</errorConditionFormula>
+    <errorDisplayField>Subscription_Percentage__c</errorDisplayField>
+    <errorMessage>Please select the subscription percentage.</errorMessage>
+</ValidationRule>

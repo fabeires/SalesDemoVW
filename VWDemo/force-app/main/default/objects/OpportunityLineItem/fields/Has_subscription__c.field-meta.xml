@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Has_subscription__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Determines if Product is sold with a subscription</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Yearly subscription is sold alongside product</inlineHelpText>
+    <label>Has subscription?</label>
+    <type>Checkbox</type>
+</CustomField>
