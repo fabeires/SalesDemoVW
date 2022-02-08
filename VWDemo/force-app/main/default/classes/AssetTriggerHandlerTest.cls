@@ -31,10 +31,10 @@ public class AssetTriggerHandlerTest {
         
         // Custom Setting
         AssetEnrichmentParameters__c customSettingData = new AssetEnrichmentParameters__c();
-        customSettingData.Endpoint__c = 'https://eu1.anypoint.mulesoft.com/mocking/api/v1/links/267cf127-5cc9-499d-bb5c-fe2d447aa99d/JOINTHEDIGITALHUB/WMAH05ZZZ4B011671';
-        customSettingData.Client_Id__c = 'b903e91e6c6542a3a4a6e800f37f95ea';
-        customSettingData.Client_Secret__c = '4d73e495F84E4c47B8a8E37C8F8B96b3';
-        customSettingData.Correlation_Id__c = '267cf127-5cc9-499d-bb5c-fe2d447aa99d';
+        customSettingData.Endpoint__c = 'testEndpoint';
+        customSettingData.Client_Id__c = 'testClient';
+        customSettingData.Client_Secret__c = 'testSecret';
+        customSettingData.Correlation_Id__c = 'testCorrelation';
         insert customSettingData;
     }
     

@@ -1,5 +1,5 @@
 public class AssetWrapper {
-    
+    // used to parse Asset API response
     public String vin;
     public String vehicleNum;
     public String vehicleRegNum;
@@ -18,6 +18,5 @@ public class AssetWrapper {
     public String truckAxle;
     public String customerRegDate;
     public String customerNo;
-    public String customerName;
-    
+    public String customerName; 
 }

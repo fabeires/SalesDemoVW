@@ -33,7 +33,7 @@ public class OrderTriggerHandlerTest {
         testOpportunity.AccountId = testAccount.Id;
         testOpportunity.Pricebook2Id = Test.getStandardPricebookId();
         testOpportunity.Name= 'testOpp';
-        testOpportunity.StageName = 'Open';
+        testOpportunity.StageName = System.Label.OpportunityOpen;
         testOpportunity.CloseDate = system.today();
         insert testOpportunity;
         
@@ -58,18 +58,19 @@ public class OrderTriggerHandlerTest {
         testOrder.AccountId = [Select id from Account limit 1].Id;
         testOrder.OpportunityId = [Select id from Opportunity limit 1].Id;
         testOrder.Pricebook2Id = Test.getStandardPricebookId();
-        testOrder.Status = 'draft';
+        testOrder.Status = System.Label.OrderDraft;
         testOrder.EffectiveDate = System.today();
         
         Test.startTest();
         
         insert testOrder;
+        
         Test.stopTest();
         
         // Query to get the new value after trigger function
         List<OrderItem> testOrderItems = [Select Id from OrderItem];
         
-        // If all goes well percentage of 10% should be added to the unit price 
+        // If all goes well there should now be an order item
         System.assertEquals(1, testOrderItems.size());
     }
     
@@ -81,20 +82,20 @@ public class OrderTriggerHandlerTest {
         testOrder.AccountId = [Select id from Account limit 1].Id;
         testOrder.OpportunityId = [Select id from Opportunity limit 1].Id;
         testOrder.Pricebook2Id = Test.getStandardPricebookId();
-        testOrder.Status = 'draft';
+        testOrder.Status = System.Label.OrderDraft;
         testOrder.EffectiveDate = System.today();
 		insert testOrder;
         
         Test.startTest();
-        testOrder.Status = 'Activated';
+        testOrder.Status = System.Label.OrderActivated;
         update testOrder;
         Test.stopTest();
         
         // Query to get the new value after trigger function
         Opportunity testOpp = [Select Id, StageName from Opportunity limit 1];
         
-        // If all goes well percentage of 10% should be added to the unit price 
-        System.assertEquals('Closed Won', testOpp.StageName);
+        // If all goes well Opportunity is now closed
+        System.assertEquals(System.Label.OpportunityClosedWon, testOpp.StageName);
     }
     
 }

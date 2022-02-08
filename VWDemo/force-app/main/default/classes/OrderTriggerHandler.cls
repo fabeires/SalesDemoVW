@@ -69,14 +69,14 @@ public without sharing class OrderTriggerHandler {
                 if(auxOpp.OpportunityLineItems.size() == 0) {
                     for(Order aux: orderList) {
                         if(aux.OpportunityId == auxOpp.Id) {
-                            aux.addError('Please add products to the Opportunity firts'); 
+                            aux.addError(System.Label.AddProductsToOpp); 
                         }
                     }  
                 }
                 if(auxOpp.Orders.size() > 0) { 
                     for(Order aux: orderList) {
                         if(aux.OpportunityId == auxOpp.Id) {
-                            aux.addError('There is already an associated order: ' + auxOpp.Orders.get(0).OrderNumber); 
+                            aux.addError(System.Label.AlreadyAssociatedOrder + auxOpp.Orders.get(0).OrderNumber); 
                         }
                     }  
                 }
@@ -90,7 +90,7 @@ public without sharing class OrderTriggerHandler {
         
         // for each order that is activated
         for(Order auxOppLine : orderList) {
-            if(auxOppLine.Status == 'Activated') {
+            if(auxOppLine.Status == System.Label.OrderActivated) {
                 opportunityIdSet.add(auxOppLine.OpportunityId);
             } 
         }
@@ -98,11 +98,11 @@ public without sharing class OrderTriggerHandler {
         // If any Opportunity
         if(!opportunityIdSet.isEmpty()) {
             List<Opportunity> opportunityListToUpdate = new List<Opportunity>();
-            opportunityListToUpdate = [Select Id, StageName from Opportunity where Id IN: opportunityIdSet AND StageName != 'Closed Won'];
+            opportunityListToUpdate = [Select Id, StageName from Opportunity where Id IN: opportunityIdSet AND StageName !=: System.Label.OpportunityClosedWon];
             
             // update Opportunity
             for(Opportunity auxOpp : opportunityListToUpdate) {
-                auxOpp.StageName = 'Closed Won';
+                auxOpp.StageName = System.Label.OpportunityClosedWon;
             }
             
             if(!opportunityListToUpdate.isEmpty()) {

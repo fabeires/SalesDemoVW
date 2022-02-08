@@ -34,7 +34,7 @@ public class OpportunityLineItemTriggerHandlerTest {
         testOpportunity.AccountId = testAccount.Id;
         testOpportunity.Pricebook2Id = Test.getStandardPricebookId();
         testOpportunity.Name= 'testOpp';
-        testOpportunity.StageName = 'Open';
+        testOpportunity.StageName = System.Label.OpportunityOpen;
         testOpportunity.CloseDate = system.today();
         insert testOpportunity;
     }

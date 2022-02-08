@@ -17,6 +17,10 @@
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>AssetUtils</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>AssetWrapper</apexClass>
         <enabled>false</enabled>
     </classAccesses>

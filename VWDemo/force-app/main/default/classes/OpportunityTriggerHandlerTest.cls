@@ -34,7 +34,7 @@ public class OpportunityTriggerHandlerTest {
         testOpportunity.AccountId = testAccount.Id;
         testOpportunity.Pricebook2Id = Test.getStandardPricebookId();
         testOpportunity.Name= 'testOpp';
-        testOpportunity.StageName = 'Open';
+        testOpportunity.StageName = System.Label.OpportunityOpen;
         testOpportunity.CloseDate = system.today();
         insert testOpportunity;
         
@@ -47,7 +47,6 @@ public class OpportunityTriggerHandlerTest {
         testLineItem.UnitPrice = 10;
         testLineItem.Quantity = 1;
         testLineItem.PricebookEntryId = testEntry.Id;  
-        
         insert testLineItem;
     }
     
@@ -59,7 +58,7 @@ public class OpportunityTriggerHandlerTest {
         // update Opportunity so it goes through the trigger
         Test.startTest();
         
-        testOppToUpdate.StageName = 'Closed Won';
+        testOppToUpdate.StageName = System.Label.OpportunityClosedWon;
         update testOppToUpdate;
         
         Test.stopTest();

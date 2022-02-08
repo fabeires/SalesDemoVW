@@ -6,7 +6,7 @@ public without sharing class OpportunityTriggerHandler {
         
         // for each Opportunity get all that changed to Closed Won
         for(Opportunity auxOpp : newMap.values()) {
-            if(auxOpp.StageName != oldMap.get(auxOpp.Id).StageName && auxOpp.StageName == 'Closed Won'){ 
+            if(auxOpp.StageName != oldMap.get(auxOpp.Id).StageName && auxOpp.StageName == System.Label.OpportunityClosedWon){ 
                 handleAssetCreationMap.put(auxOpp.Id, auxOpp);
             }            
         }
@@ -34,7 +34,7 @@ public without sharing class OpportunityTriggerHandler {
                     Asset currentAsset = new Asset();
                     currentAsset.Product2Id = auxOppLine.Product2Id;
                     currentAsset.Name = auxOppLine.Product2.Name;
-                    currentAsset.Status = 'Purchased';
+                    currentAsset.Status = System.Label.AssetPurchased;
                     currentAsset.Price = auxOppLine.UnitPrice;
                     currentAsset.AccountId = auxOppLine.Opportunity.AccountId;
                     currentAsset.Has_subscription__c = auxOppLine.Has_subscription__c;
