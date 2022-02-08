@@ -22,27 +22,33 @@ public without sharing class OpportunityTriggerHandler {
         List<Asset> assetListToInsert = new List<Asset>();
         
         // All OpportunityLineItem of the CLosed won Opportunities
-        List<OpportunityLineItem> oppLineItemList = new List<OpportunityLineItem>();
-        oppLineItemList = [Select Id, OpportunityId, Opportunity.AccountId, Product2.Name, Quantity, UnitPrice, Has_subscription__c from OpportunityLineItem where OpportunityId IN: opportunityMap.keySet()];
+        List<Opportunity> oppList = new List<Opportunity>();
+        oppList = [Select id, AccountId, (Select Id, OpportunityId, Product2.Name, Quantity, UnitPrice, Has_subscription__c from OpportunityLineItems), (Select Id from Orders) from Opportunity where Id IN: opportunityMap.keySet()];
         
         // Iterate over each OpportunityLineItem and create an Asset for the Opportunity Account 
-        if(!oppLineItemList.isEmpty()) {
-            for(OpportunityLineItem auxOppLine : oppLineItemList) {
-                
-                for(integer i=0; i<auxOppLine.Quantity; i++) {
-                    // Build each asset
-                    Asset currentAsset = new Asset();
-                    currentAsset.Product2Id = auxOppLine.Product2Id;
-                    currentAsset.Name = auxOppLine.Product2.Name;
-                    currentAsset.Status = System.Label.AssetPurchased;
-                    currentAsset.Price = auxOppLine.UnitPrice;
-                    currentAsset.AccountId = auxOppLine.Opportunity.AccountId;
-                    currentAsset.Has_subscription__c = auxOppLine.Has_subscription__c;
-                    currentAsset.PurchaseDate = system.today();
-                    currentAsset.Quantity = 1;
-                    if(currentAsset.Has_subscription__c)
-                    currentAsset.Subscription_End_Date__c = Date.newInstance(system.Today().year()+1, system.Today().month(), system.Today().Day());
-                    assetListToInsert.add(currentAsset);  
+        if(!oppList.isEmpty()) {
+            for(Opportunity auxOpp : oppList) {
+                for(OpportunityLineItem auxOppLine : auxOpp.OpportunityLineItems) {
+                    for(integer i=0; i < auxOppLine.Quantity; i++) {
+                        // Build each asset
+                        Asset currentAsset = new Asset();
+                        currentAsset.Product2Id = auxOppLine.Product2Id;
+                        currentAsset.Name = auxOppLine.Product2.Name;
+                        currentAsset.Status = System.Label.AssetPurchased;
+                        currentAsset.Price = auxOppLine.UnitPrice;
+                        currentAsset.AccountId = auxOpp.AccountId;
+                        currentAsset.Has_subscription__c = auxOppLine.Has_subscription__c;
+                        currentAsset.PurchaseDate = system.today();
+                        currentAsset.Quantity = 1;
+                        
+                        if(!auxOpp.orders.isEmpty())
+                        currentAsset.Order__c = auxOpp.orders[0].Id;
+                        
+                        if(currentAsset.Has_subscription__c)
+                            currentAsset.Subscription_End_Date__c = Date.newInstance(system.Today().year()+1, system.Today().month(), system.Today().Day());
+                        
+                        assetListToInsert.add(currentAsset);  
+                    }
                 } 
             }
             

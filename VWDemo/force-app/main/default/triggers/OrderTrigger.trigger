@@ -13,6 +13,7 @@ trigger OrderTrigger on Order (before insert, after insert, after update) {
         if(Trigger.isInsert) {
             // Transfer Items from Opp to Order
             OrderTriggerHandler.populateLineItems(Trigger.new);
+             OrderTriggerHandler.activateOrder(Trigger.newMap);
         }
         if(Trigger.isUpdate) {
             // Order is activated so close Opp

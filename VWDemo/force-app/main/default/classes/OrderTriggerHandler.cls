@@ -1,5 +1,39 @@
 public without sharing class OrderTriggerHandler {
     
+    public static void checkPreventCreation(List<Order> orderList) {
+        // Opportunity Id set
+        Set<Id> opportunityIdSet = new Set<Id>();
+        
+        // for each order that is activated
+        for(Order auxOppLine : orderList) {
+            opportunityIdSet.add(auxOppLine.OpportunityId); 
+        }
+        
+        // If any Opportunity
+        if(!opportunityIdSet.isEmpty()) {
+            List<Opportunity> opportunityListToUpdate = new List<Opportunity>();
+            opportunityListToUpdate = [Select Id, StageName, (Select Id from OpportunityLineItems), (Select Id, OrderNumber from Orders where Status = 'Activated') from Opportunity where Id IN: opportunityIdSet];
+            
+            // prevent creation if Opportunity has no products or if it has any other order
+            for(Opportunity auxOpp : opportunityListToUpdate) {
+                if(auxOpp.OpportunityLineItems.size() == 0) {
+                    for(Order aux: orderList) {
+                        if(aux.OpportunityId == auxOpp.Id) {
+                            aux.addError(System.Label.AddProductsToOpp); 
+                        }
+                    }  
+                }
+                if(auxOpp.Orders.size() > 0) { 
+                    for(Order aux: orderList) {
+                        if(aux.OpportunityId == auxOpp.Id) {
+                            aux.addError(System.Label.AlreadyAssociatedOrder + ' ' +  auxOpp.Orders.get(0).OrderNumber); 
+                        }
+                    }  
+                }
+            }  
+        }
+    }
+    
     public static void populateLineItems(List<Order> orderList) {
         // List to insert
         List<OrderItem> orderLineItemList = new List<OrderItem>();
@@ -51,37 +85,22 @@ public without sharing class OrderTriggerHandler {
         }
     }
     
-    public static void checkPreventCreation(List<Order> orderList) {
-        // Opportunity Id set
-        Set<Id> opportunityIdSet = new Set<Id>();
+    public static void activateOrder(Map<Id, Order> orderMap) {
         
-        // for each order that is activated
-        for(Order auxOppLine : orderList) {
-            opportunityIdSet.add(auxOppLine.OpportunityId); 
-        }
+        List<Order> currentOrderList = [Select Id, Status from Order where ID In: orderMap.keySet()];
         
-        // If any Opportunity
-        if(!opportunityIdSet.isEmpty()) {
-            List<Opportunity> opportunityListToUpdate = new List<Opportunity>();
-            opportunityListToUpdate = [Select Id, StageName, (Select Id from OpportunityLineItems), (Select Id, OrderNumber from Orders where Status = 'Activated') from Opportunity where Id IN: opportunityIdSet];
+        if(!currentOrderList.isEmpty()) {
             
-            // prevent creation if Opportunity has no products or if it has any other order
-            for(Opportunity auxOpp : opportunityListToUpdate) {
-                if(auxOpp.OpportunityLineItems.size() == 0) {
-                    for(Order aux: orderList) {
-                        if(aux.OpportunityId == auxOpp.Id) {
-                            aux.addError(System.Label.AddProductsToOpp); 
-                        }
-                    }  
-                }
-                if(auxOpp.Orders.size() > 0) { 
-                    for(Order aux: orderList) {
-                        if(aux.OpportunityId == auxOpp.Id) {
-                            aux.addError(System.Label.AlreadyAssociatedOrder + ' ' +  auxOpp.Orders.get(0).OrderNumber); 
-                        }
-                    }  
-                }
-            }  
+            for(Order auxOrder : currentOrderList) {
+                auxOrder.Status = System.Label.OrderActivated;
+            }
+            
+            try{
+                update currentOrderList;
+            }
+            catch(Exception e) {
+                system.debug('OrderTriggerHandler activateOrder' + e.getMessage());
+            }
         }
     }
     

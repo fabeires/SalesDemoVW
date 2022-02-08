@@ -59,7 +59,7 @@ public class OrderTriggerHandlerTest {
         testOrder.OpportunityId = [Select id from Opportunity limit 1].Id;
         testOrder.Status = System.Label.OrderDraft;
         testOrder.EffectiveDate = System.today();
-        
+        testOrder.Pricebook2Id = Test.getStandardPricebookId();
         Test.startTest();
         
         insert testOrder;
@@ -75,29 +75,5 @@ public class OrderTriggerHandlerTest {
         // Check if pricebook Id is set from Opportunity
         System.assertEquals(Test.getStandardPricebookId(), testOrderItems.get(0).Order.Pricebook2Id);
     }
-    
-    @isTest
-    public static void shouldCloseOpportunity() {
-        
-        // Create Order
-        Order testOrder = new Order();
-        testOrder.AccountId = [Select id from Account limit 1].Id;
-        testOrder.OpportunityId = [Select id from Opportunity limit 1].Id;
-        testOrder.Pricebook2Id = Test.getStandardPricebookId();
-        testOrder.Status = System.Label.OrderDraft;
-        testOrder.EffectiveDate = System.today();
-		insert testOrder;
-        
-        Test.startTest();
-        testOrder.Status = System.Label.OrderActivated;
-        update testOrder;
-        Test.stopTest();
-        
-        // Query to get the new value after trigger function
-        Opportunity testOpp = [Select Id, StageName from Opportunity limit 1];
-        
-        // If all goes well Opportunity is now closed
-        System.assertEquals(System.Label.OpportunityClosedWon, testOpp.StageName);
-    }
-    
+ 
 }
