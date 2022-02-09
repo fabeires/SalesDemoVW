@@ -52,6 +52,15 @@ public class OpportunityTriggerHandlerTest {
     
     @isTest
     public static void shouldCreateAsset() {
+        // Create Order
+        Order testOrder = new Order();
+        testOrder.AccountId = [Select id from Account limit 1].Id;
+        testOrder.OpportunityId = [Select id from Opportunity limit 1].Id;
+        testOrder.Status = System.Label.OrderDraft;
+        testOrder.EffectiveDate = System.today();
+        testOrder.Pricebook2Id = Test.getStandardPricebookId();
+        insert testOrder;
+        
         // Query opp to update
         Opportunity testOppToUpdate = [Select Id, StageName from Opportunity limit 1];
         
@@ -69,5 +78,29 @@ public class OpportunityTriggerHandlerTest {
         // If all goes well there should be a new asset created
         System.assertEquals(1, assetList.size());
     }
-   
+    
+    @isTest
+    public static void shouldNotUpdateOpportunity() {
+        string errorMessage = '';
+        
+        // Query opp to update
+        Opportunity testOppToUpdate = [Select Id, StageName from Opportunity limit 1];
+        
+        // update Opportunity so it goes through the trigger
+        Test.startTest();
+        
+        testOppToUpdate.StageName = System.Label.OpportunityClosedWon;
+        
+        try{
+            update testOppToUpdate;
+        }
+        catch(exception e) {
+            errorMessage = e.getMessage();
+        }
+        
+        Test.stopTest();
+        
+        System.assert(errorMessage?.contains(System.Label.PreventOpportunityClosedWonChange));
+    }
+    
 }

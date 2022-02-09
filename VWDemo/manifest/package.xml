@@ -189,10 +189,7 @@
 		<name>RemoteSiteSetting</name>
 	</types>
 	<types>
-		<members>OpportunityLineItem.AllowSubscription</members>
-		<members>OpportunityLineItem.Demand_Subscription_percentage</members>
-		<members>Order.ActivatedOrderCanNotChange</members>
-		<members>OrderItem.OrderProductNotEditable</members>
+		<members>*</members>
 		<name>ValidationRule</name>
 	</types>
 	<version>53.0</version>

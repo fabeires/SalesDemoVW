@@ -104,4 +104,12 @@
         <shortDescription>OrderDraft</shortDescription>
         <value>Draft</value>
     </labels>
+    <labels>
+        <fullName>PreventOpportunityClosedWonChange</fullName>
+        <categories>ErrorMessage</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>PreventOpportunityClosedWonChange</shortDescription>
+        <value>Opportunity can not be closed without an order. Please create an order.</value>
+    </labels>
 </CustomLabels>

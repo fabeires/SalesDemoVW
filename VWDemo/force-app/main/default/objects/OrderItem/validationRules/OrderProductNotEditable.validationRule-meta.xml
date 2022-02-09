@@ -3,5 +3,5 @@
     <fullName>OrderProductNotEditable</fullName>
     <active>true</active>
     <errorConditionFormula>NOT(ISNEW())</errorConditionFormula>
-    <errorMessage>Please update the products in the Opportunity</errorMessage>
+    <errorMessage>Order Items can not be updated</errorMessage>
 </ValidationRule>

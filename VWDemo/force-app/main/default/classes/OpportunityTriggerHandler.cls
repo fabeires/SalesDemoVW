@@ -1,6 +1,31 @@
 public without sharing class OpportunityTriggerHandler {
     
-    public static void handleAfterUpdate(Map<Id, Opportunity> newMap, Map<Id, Opportunity> oldMap) {
+    public static void checkPreventClosedWon(Map<Id, Opportunity> newMap, Map<Id, Opportunity> oldMap) {
+        // handle Update list
+        Map<Id, Opportunity> handleClosedWonUpdare = new Map<Id, Opportunity>();
+        
+        // for each Opportunity get all that changed to Closed Won
+        for(Opportunity auxOpp : newMap.values()) {
+            if(auxOpp.StageName != oldMap.get(auxOpp.Id).StageName && auxOpp.StageName == System.Label.OpportunityClosedWon){ 
+                handleClosedWonUpdare.put(auxOpp.Id, auxOpp);
+            }            
+        }
+        
+        if(!handleClosedWonUpdare.isEmpty()) {
+            // All Opportunity and Orders
+            List<Opportunity> oppList = new List<Opportunity>();
+            oppList = [Select Id, (Select Id from Orders) from Opportunity where Id IN: handleClosedWonUpdare.keySet()];
+            
+            // Prevent update if has no orders
+            for(Opportunity auxOpp : oppList) {
+                if(auxOpp.Orders.size() == 0) {
+                    newMap.get(auxOpp.Id).addError(System.Label.PreventOpportunityClosedWonChange);  
+                }
+            }
+        }
+    }
+    
+    public static void handleClosedWonUpdate(Map<Id, Opportunity> newMap, Map<Id, Opportunity> oldMap) {
         // handleAssetCreation list
         Map<Id, Opportunity> handleAssetCreationMap = new Map<Id, Opportunity>();
         
@@ -23,7 +48,7 @@ public without sharing class OpportunityTriggerHandler {
         
         // All OpportunityLineItem of the CLosed won Opportunities
         List<Opportunity> oppList = new List<Opportunity>();
-        oppList = [Select id, AccountId, (Select Id, OpportunityId, Product2.Name, Quantity, UnitPrice, Has_subscription__c from OpportunityLineItems), (Select Id from Orders) from Opportunity where Id IN: opportunityMap.keySet()];
+        oppList = [Select id, AccountId, (Select Id, OpportunityId, Product2.Name, Quantity, UnitPrice, Has_subscription__c, Subscription_Percentage__c from OpportunityLineItems), (Select Id from Orders) from Opportunity where Id IN: opportunityMap.keySet()];
         
         // Iterate over each OpportunityLineItem and create an Asset for the Opportunity Account 
         if(!oppList.isEmpty()) {
@@ -44,9 +69,11 @@ public without sharing class OpportunityTriggerHandler {
                         if(!auxOpp.orders.isEmpty())
                         currentAsset.Order__c = auxOpp.orders[0].Id;
                         
-                        if(currentAsset.Has_subscription__c)
+                        if(currentAsset.Has_subscription__c) {
                             currentAsset.Subscription_End_Date__c = Date.newInstance(system.Today().year()+1, system.Today().month(), system.Today().Day());
-                        
+                            currentAsset.Subscription_Percentage__c = auxOppLine.Subscription_Percentage__c;
+                        }
+                            
                         assetListToInsert.add(currentAsset);  
                     }
                 } 
