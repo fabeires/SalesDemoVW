@@ -29,6 +29,10 @@
 	</types>
 	<types>
 		<members>*</members>
+		<name>FlexiPage</name>
+	</types>
+	<types>
+		<members>*</members>
 		<name>Layout</name>
 	</types>
 	<types>
@@ -189,7 +193,10 @@
 		<name>RemoteSiteSetting</name>
 	</types>
 	<types>
-		<members>*</members>
+		<members>OpportunityLineItem.AllowSubscription</members>
+		<members>OpportunityLineItem.Demand_Subscription_percentage</members>
+		<members>Order.ActivatedOrderCanNotChange</members>
+		<members>OrderItem.OrderProductNotEditable</members>
 		<name>ValidationRule</name>
 	</types>
 	<version>53.0</version>
