@@ -110,6 +110,6 @@
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>PreventOpportunityClosedWonChange</shortDescription>
-        <value>Opportunity can not be closed without an order. Please create an order.</value>
+        <value>Opportunity can not be closed without an order. Please add products and create an order.</value>
     </labels>
 </CustomLabels>
